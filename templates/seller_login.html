@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Login | InventoryMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Same styles as seller_register.html */
+        :root {
+    --primary-color: #1e3a8a; /* Deep blue */
+    --primary-dark: #172f6a;  /* Darker blue */
+    --secondary-color: #3b82f6; /* Medium blue */
+    --light-color: #e0f2fe; /* Lightest blue */
+    --dark-color: #0f172a; /* Very dark blue */
+    --success-color: #60a5fa; /* Lighter blue for success */
+    --overlay-color: rgba(0, 0, 0, 0.3); /* Slightly lighter overlay */
+}
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: 
+                linear-gradient(var(--overlay-color), var(--overlay-color)),
+                url('../static/images/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #333; /* Softer dark color instead of pure black */
+    font-weight: 600;
+    background: none;
+    text-transform: capitalize; /* Gives a subtle styling touch */
+    letter-spacing: 0.5px; /* Adds a bit of space between letters */
+    line-height: 1.3; /* Improves readability */
+}
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: left;
+        }
+
+        label {
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        input {
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .register-link {
+            margin-top: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .register-link a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .register-link a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .error {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: rgba(239, 35, 60, 0.1);
+            color: var(--error-color);
+            border-radius: 8px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Seller Login</h1>
+        <form id="sellerLoginForm">
+            <div class="form-group">
+                <label for="seller_id">Seller ID</label>
+                <input type="text" id="seller_id" name="seller_id" required placeholder="Enter your seller ID">
+            </div>
+        
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+        
+            <button type="submit" class="btn">Login</button>
+        </form>
+        
+        <p class="register-link">Don't have an account? <a href="{{ url_for('seller_register') }}">Register here</a></p>
+        
+        <p id="error-message" class="error" style="display:none;"></p>
+        
+        <script>
+            document.getElementById("sellerLoginForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+                
+                let seller_id = document.getElementById("seller_id").value;
+                let password = document.getElementById("password").value;
+        
+                fetch("{{ url_for('seller_login') }}", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({ seller_id: seller_id, password: password })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "{{ url_for('seller_dashboard') }}";
+                    } else {
+                        document.getElementById("error-message").textContent = data.error;
+                        document.getElementById("error-message").style.display = "block";
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        </script>
+    </div>
+</body>
+</html>

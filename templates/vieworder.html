@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | InventoryMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+    --primary-color: #1e3a8a; /* Deep blue */
+    --primary-dark: #172f6a;  /* Darker blue */
+    --secondary-color: #3b82f6; /* Medium blue */
+    --light-color: #e0f2fe; /* Lightest blue */
+    --dark-color: #0f172a; /* Very dark blue */
+    --success-color: #60a5fa; /* Lighter blue for success */
+    --overlay-color: rgba(0, 0, 0, 0.3); /* Slightly lighter overlay */
+}
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-processing {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-shipped {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .status-delivered {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .order-item:not(:last-child) {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 1.5rem;
+        }
+
+        .order-item-details {
+            flex-grow: 1;
+        }
+
+        .order-item-name {
+            font-size: 1rem;
+            margin: 0 0 0.3rem 0;
+            color: var(--dark-color);
+        }
+
+        .order-item-price {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .order-item-quantity {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .order-total {
+            text-align: right;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        .empty-orders {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .continue-shopping {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="{{ url_for('products') }}" class="logo">InventoryMS</a>
+        <div class="user-info">
+            <span>Welcome, {{ session['user_id'] }}!</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Your Orders</h1>
+        
+        {% if orders %}
+            {% for order in orders %}
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <span class="order-id">Order #{{ order[0] }}</span>
+                        <span class="order-date"> • {{ order[7] }}</span>
+                    </div>
+                    <span class="order-status status-{{ order[8].lower() }}">{{ order[8] }}</span>
+                </div>
+                
+                <div class="order-item">
+                    <img src="{{ get_image_url(order[4], '') }}" alt="{{ order[2] }}" class="order-item-image">
+                    <div class="order-item-details">
+                        <h3 class="order-item-name">{{ order[2] }}</h3>
+                        <p class="order-item-price">₹{{ "%.2f"|format(order[3]) }}</p>
+                        <p class="order-item-quantity">Quantity: {{ order[5] }}</p>
+                    </div>
+                </div>
+                
+                <div class="order-total">
+                    <p>Total: ₹{{ "%.2f"|format(order[6]) }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-orders">
+                <h2>You haven't placed any orders yet</h2>
+                <p>Start shopping to see your orders here</p>
+                <a href="{{ url_for('products') }}" class="continue-shopping">
+                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

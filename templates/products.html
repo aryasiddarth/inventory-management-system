@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock | InventoryMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+    --primary-color: #1e3a8a; /* Deep blue */
+    --primary-dark: #172f6a;  /* Darker blue */
+    --secondary-color: #3b82f6; /* Medium blue */
+    --light-color: #e0f2fe; /* Lightest blue */
+    --dark-color: #0f172a; /* Very dark blue */
+    --success-color: #60a5fa; /* Lighter blue for success */
+    --overlay-color: rgba(0, 0, 0, 0.3); /* Slightly lighter overlay */
+}
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .category-section {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #f0f0f0;
+        }
+
+        .product-info {
+            padding: 1rem;
+            flex-grow: 1;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem 0;
+            color: var(--dark-color);
+        }
+
+        .product-price {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0 1rem 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex: 1;
+            transition: all 0.2s ease;
+        }
+
+        .btn-buy {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-buy:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-cart {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-cart:hover {
+            background-color: #3ab0d8;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="{{ url_for('home') }}" class="logo">InventoryMS</a>
+        <div class="user-info">
+            <span>Welcome, {{ user_name }}!</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </header>
+
+    <main class="container">
+        {% for category in products_by_category %}
+            <section class="category-section">
+                <h2 class="category-title">{{ category }}</h2>
+                <div class="products-grid">
+                    {% for product in products_by_category[category] %}
+                        <div class="product-card">
+                            <img src="{{ url_for('static', filename='images/' + product['image']) }}" 
+                            alt="{{ product['name'] }}" 
+                            class="product-image"
+                            onerror="this.src='{{ url_for('static', filename='images/default-placeholder.jpg') }}'">
+                            <div class="product-info">
+                                <h3 class="product-name">{{ product['name'] }}</h3>
+                                <p class="product-price">₹{{ "%.2f"|format(product['price']) }}</p>
+                            </div>
+                            <div class="product-actions">
+                               
+                                
+                                <form action="{{ url_for('add_to_cart') }}" method="POST">
+                                    <input type="hidden" name="product_id" value="{{ product.product_id }}">
+                                    <button type="submit" class="btn btn-cart">
+                                        <i class="fas fa-cart-plus"></i> Add to Cart
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endfor %}
+    </main>
+</body>
+</html>

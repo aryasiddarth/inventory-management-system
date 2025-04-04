@@ -1,0 +1,116 @@
+/* styles.css */
+:root {
+    --primary-color: #1e3a8a; /* Deep blue */
+    --primary-dark: #172f6a;  /* Darker blue */
+    --secondary-color: #3b82f6; /* Medium blue */
+    --light-color: #e0f2fe; /* Lightest blue */
+    --dark-color: #0f172a; /* Very dark blue */
+    --success-color: #60a5fa; /* Lighter blue for success */
+    --overlay-color: rgba(0, 0, 0, 0.3); /* Slightly lighter overlay */
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--dark-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: 
+    linear-gradient(var(--overlay-color), var(--overlay-color)),
+    url('../images/bg.jpg') no-repeat center center fixed;
+background-size: cover;
+
+
+}
+
+.container {
+    max-width: 800px;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    backdrop-filter: blur(5px);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #333; /* Softer dark color instead of pure black */
+    font-weight: 600;
+    background: none;
+    text-transform: capitalize; /* Gives a subtle styling touch */
+    letter-spacing: 0.5px; /* Adds a bit of space between letters */
+    line-height: 1.3; /* Improves readability */
+}
+
+
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+
+.btn {
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+}
+
+.btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn:nth-child(2) {
+    background-color: var(--secondary-color);
+}
+
+.btn:nth-child(2):hover {
+    background-color: #e5177e;
+}
+
+.btn:nth-child(3) {
+    background-color: var(--success-color);
+}
+
+.btn:nth-child(3):hover {
+    background-color: #3ab8db;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .button-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}

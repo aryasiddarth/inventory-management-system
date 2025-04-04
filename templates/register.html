@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register with InventoryMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --error-color: #ef233c;
+            --overlay-color: rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: 
+                linear-gradient(var(--overlay-color), var(--overlay-color)),
+                url('../images/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #333; /* Softer dark color instead of pure black */
+    font-weight: 600;
+    background: none;
+    text-transform: capitalize; /* Gives a subtle styling touch */
+    letter-spacing: 0.5px; /* Adds a bit of space between letters */
+    line-height: 1.3; /* Improves readability */
+}
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: left;
+        }
+
+        label {
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        input {
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-link {
+            margin-top: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .login-link a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .login-link a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .error {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: rgba(239, 35, 60, 0.1);
+            color: var(--error-color);
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .success {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success-color);
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Register with InventoryMS</h1>
+        <form action="{{ url_for('register') }}" method="POST">
+            <div class="form-group">
+                <label for="user_id">User ID</label>
+                <input type="text" id="user_id" name="user_id" required placeholder="Choose a user ID">
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Create a password">
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password">
+            </div>
+            
+            <button type="submit" class="btn">Register</button>
+        </form>
+        <p class="login-link">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        {% if success %}
+            <p class="success">{{ success }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
